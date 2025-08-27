@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 
 
@@ -57,6 +59,17 @@ public class AlunoController {
         alunoService.createAluno(aluno);
         attributes.addFlashAttribute("message", "Aluno salvo com sucesso!");
         return "redirect:/alunos"; 
+    }
+    
+    @GetMapping("/delete/{id}")
+    public String delete(@PathVariable Long id, RedirectAttributes attributes) {
+        try {
+            alunoService.deleteAluno(id);
+            attributes.addFlashAttribute("message", "Aluno Ecluido co sucesso!");
+        } catch (Exception e) {
+            attributes.addFlashAttribute("error", e.getMessage());
+        }
+        return "redirect:/alunos";
     }
     
 
