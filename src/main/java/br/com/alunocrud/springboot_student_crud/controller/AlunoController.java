@@ -1,10 +1,12 @@
 package br.com.alunocrud.springboot_student_crud.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import br.com.alunocrud.springboot_student_crud.model.Aluno;
@@ -14,14 +16,14 @@ import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 
 
 
 @Controller
-@RequestMapping("/products")
+@RequestMapping("/alunos")
 public class AlunoController {
     
     @Autowired
@@ -46,7 +48,7 @@ public class AlunoController {
             return "form";
         } catch (RuntimeException e) {
             attributes.addFlashAttribute("error", e.getMessage());
-            return "redirect:/products";
+            return "redirect:/alunos";
         }
     }
 
@@ -65,12 +67,25 @@ public class AlunoController {
     public String delete(@PathVariable Long id, RedirectAttributes attributes) {
         try {
             alunoService.deleteAluno(id);
-            attributes.addFlashAttribute("message", "Aluno Ecluido co sucesso!");
+            attributes.addFlashAttribute("message", "Aluno Excluido co sucesso!");
         } catch (Exception e) {
             attributes.addFlashAttribute("error", e.getMessage());
         }
         return "redirect:/alunos";
     }
-    
 
+    // Buscar produto por nome ------------------------------------------------------->  
+    @GetMapping("/search")
+    public String search(@RequestParam(name = "name", required = false) String name, Model model) {
+        List<Aluno> alunos;
+        
+        if (name != null && !name.isBlank()) {
+            alunos = alunoService.findByName(name);
+        } else {
+            alunos = new ArrayList<>();
+        }
+        
+        model.addAttribute("alunos", alunos);
+        return "search";
+    }
 }

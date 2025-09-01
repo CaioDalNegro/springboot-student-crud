@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+    <title>Alunos - Buscar por nome</title>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Buscar aluno por nome</h1>
+
+        <form th:action="@{/alunos/search}" method="get" role="search">
+            <label for="name" class="muted">Nome do aluno</label>
+            <input id="name" name="name" type="text" placeholder="Ex.: João" th:value="${param.name}" />
+            <button type="submit">Buscar</button>
+            <a th:href="@{/alunos}" class="button">Voltar à lista</a>
+        </form>
+
+        <div th:if="${alunos != null}">
+            <p class="muted" th:if="${#lists.isEmpty(alunos)}">Nenhum aluno encontrado.</p>
+
+            <table th:if="${!#lists.isEmpty(alunos)}">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nome</th>
+                        <th>Idade</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="aluno : ${alunos}">
+                        <td th:text="${aluno.id}">1</td>
+                        <td th:text="${aluno.name}">Exemplo</td>
+                        <td th:text="${aluno.idade}">20</td>
+                        <td>
+                            <a th:href="@{'/alunos/edit/' + ${aluno.id}}">Editar</a>
+                            <a th:href="@{'/alunos/delete/' + ${aluno.id}}"
+                               onclick="return confirm('Tem certeza que deseja excluir este aluno?');">
+                                Excluir
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

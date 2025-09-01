@@ -40,4 +40,9 @@ public class AlunoService {
             throw new RuntimeException("Erro ao excluir produto!");
         alunoRepository.deleteById(id);
     }
+
+    //Buscar produto por Nome-------------------------->
+    public List <Aluno> findByName(String name){
+        return alunoRepository.findByNameContainingIgnoreCase(name);
+    }
 }
